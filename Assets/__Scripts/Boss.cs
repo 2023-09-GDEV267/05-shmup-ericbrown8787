@@ -79,7 +79,7 @@ public class Boss: Enemy {
                 }
 
                 u = 1 - Mathf.Pow(1 - u, 2); // Apply Ease Out easing to u
-                pos = ((1 - u) * p0) + (u * p1);// Simple linear interpolation*/
+                pos = ((1 - u) * p0) + (u * p1);// Simple linear interpolation
         Vector3 pos = transform.position;
 
         if (pos.x < -leftAndRightEdge)
@@ -92,8 +92,24 @@ public class Boss: Enemy {
         }
 
         pos.x += speed * Time.deltaTime;
-        pos.y = 200;
+        pos.y = 200;*/
 
+        Vector3 tempPos = pos;
+
+        float age = Time.time - timeStart;
+        float theta = Mathf.PI * 2 * age;
+        float sin = Mathf.Sin(theta);
+        tempPos.x = sin;
+        pos = tempPos;
+
+        //rotate a bit about y
+        Vector3 rot = new Vector3(0, sin, 0);
+        this.transform.rotation = Quaternion.Euler(rot);
+
+        // base.Move() still handles the movement down in y
+        base.Move();
+
+        // print (bndCheck.isOnScreen);
     }
 
     // These two functions find a Part in parts based on name or GameObject
