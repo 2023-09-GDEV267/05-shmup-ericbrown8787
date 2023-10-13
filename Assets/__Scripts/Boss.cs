@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//This uses the Enemy_4 Script, but with some alterations to make it distinct
+//This mostly uses the Enemy_4 Script as a base.  However, the movement from Enemy_1 is
+//used, as it provided the ideal results.
 
 /// <summary>
 /// Part is another serializable data storage class just like WeaponDefinition
