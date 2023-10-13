@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//This uses the Enemy_4 Script, but with some alterations to make it distinct
+
 /// <summary>
 /// Part is another serializable data storage class just like WeaponDefinition
 /// </summary>
