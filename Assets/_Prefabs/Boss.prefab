@@ -291,7 +291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 503a8110f95cacc4c8a9f21446fcc90f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 3
   fireRate: 0.3
   health: 20
   score: 100
@@ -326,7 +326,6 @@ MonoBehaviour:
     protectedBy: []
     go: {fileID: 0}
     mat: {fileID: 0}
-  leftAndRightEdge: 20
 --- !u!114 &114091118160397558
 MonoBehaviour:
   m_ObjectHideFlags: 0
