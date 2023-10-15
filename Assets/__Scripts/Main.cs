@@ -10,6 +10,7 @@ public class Main : MonoBehaviour {
 
     [Header("Set in Inspector")]
     public GameObject[] prefabEnemies; // Array of Enemy prefabs
+    public GameObject prefabBoss;
     public float enemySpawnPerSecond = 0.5f; // # Enemies/second
     public float enemyDefaultPadding = 1.5f; // Padding for position
     public WeaponDefinition[] weaponDefinitions;
@@ -57,7 +58,10 @@ public class Main : MonoBehaviour {
             WEAP_DICT[def.type] = def;
         }
     }
-
+    public void Start()
+    {
+        SpawnBoss();
+    }
     public void SpawnEnemy()
     {
         // Pick a random Enemy prefab to instantiate
@@ -81,6 +85,31 @@ public class Main : MonoBehaviour {
 
         // Invoke SpawnEnemy() again
         Invoke("SpawnEnemy", 1f / enemySpawnPerSecond);
+    }
+
+    public void SpawnBoss()
+    {
+        // Pick a random Enemy prefab to instantiate
+/*        int ndx = Random.Range(0, prefabEnemies.Length);*/
+        GameObject go = Instantiate<GameObject>(prefabBoss);
+
+        // Position the ENemy above the screen with a random x position
+        float enemyPadding = enemyDefaultPadding;
+        if (go.GetComponent<BoundsCheck>() != null)
+        {
+            enemyPadding = Mathf.Abs(go.GetComponent<BoundsCheck>().radius);
+        }
+
+        // Set the initial position for the spawned Enemy
+        Vector3 pos = Vector3.zero;
+        float xMin = -bndCheck.camWidth + enemyPadding;
+        float xMax = bndCheck.camWidth - enemyPadding;
+        pos.x = Random.Range(xMin, xMax);
+        pos.y = bndCheck.camHeight + enemyPadding;
+        go.transform.position = pos;
+/*
+        // Invoke SpawnEnemy() again
+        Invoke("SpawnEnemy", 1f / enemySpawnPerSecond);*/
     }
 
     public void DelayedRestart(float delay)
