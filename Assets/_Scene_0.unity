@@ -374,11 +374,10 @@ MonoBehaviour:
   - {fileID: 1158547974957732, guid: a0a74b7d2e3ac2449b0e77185af83fed, type: 3}
   - {fileID: 1700942416061258, guid: 3f6055558a488314cb38691d88c41fdf, type: 3}
   - {fileID: 1539775467464788, guid: 06677ec088bca734db80dc6ecea1d7af, type: 3}
-  - {fileID: 1539775467464788, guid: fe12238f9de0f784db943678161f3bb9, type: 3}
-  - {fileID: 1539775467464788, guid: fe12238f9de0f784db943678161f3bb9, type: 3}
-  - {fileID: 1539775467464788, guid: fe12238f9de0f784db943678161f3bb9, type: 3}
+  prefabBoss: {fileID: 1539775467464788, guid: fe12238f9de0f784db943678161f3bb9, type: 3}
   enemySpawnPerSecond: 0.5
   enemyDefaultPadding: 1.5
+  bossFrequency: 3
   weaponDefinitions:
   - type: 1
     letter: B
@@ -412,6 +411,7 @@ MonoBehaviour:
   prefabPowerUp: {fileID: 1062273549804748, guid: 9649a9a79085a854d9990613a980f435,
     type: 3}
   powerUpFrequency: 01000000010000000200000006000000
+  enemiesUntilBoss: 0
 --- !u!20 &282840813
 Camera:
   m_ObjectHideFlags: 0

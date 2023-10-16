@@ -18,7 +18,6 @@ public class Enemy : MonoBehaviour {
     public bool showingDamage = false;
     public float damageDoneTime; // Time to stop showing damage
     public bool notifiedOfDestruction = false; // Will be used later
-
     protected BoundsCheck bndCheck;
 
     private void Awake()

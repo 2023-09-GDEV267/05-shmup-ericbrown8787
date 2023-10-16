@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,20 +14,26 @@ public class Main : MonoBehaviour {
     public GameObject prefabBoss;
     public float enemySpawnPerSecond = 0.5f; // # Enemies/second
     public float enemyDefaultPadding = 1.5f; // Padding for position
+    public int bossFrequency = 5; //How many enemies the player must destroy before the boss appears
     public WeaponDefinition[] weaponDefinitions;
     public GameObject prefabPowerUp;
     public WeaponType[] powerUpFrequency = new WeaponType[]
     {
         WeaponType.blaster, WeaponType.blaster, WeaponType.spread, WeaponType.shield
     };
+    private int enemiesDestroyed = 0;
+    public int enemiesUntilBoss;
+    private bool bossSpawned = false;
 
     private BoundsCheck bndCheck;
 
+
     public void ShipDestroyed( Enemy e)
     {
-        // Potentially generate a PowerUp
-        if (Random.value <= e.powerUpDropChance)
+        enemiesDestroyed++;
+        if (e.tag == "Boss")
         {
+            bossSpawned= false;
             // Choose which PowerUp to pick
             // Pick one from the possibilities in powerUpFrequency
             int ndx = Random.Range(0, powerUpFrequency.Length);
@@ -39,7 +46,30 @@ public class Main : MonoBehaviour {
 
             // Set it to the position of the destroyed ship
             pu.transform.position = e.transform.position;
+        } else
+        {
+            if (!bossSpawned)
+            {
+                enemiesUntilBoss -= 1;
+            }
+            // Potentially generate a PowerUp
+            if (Random.value <= e.powerUpDropChance)
+            {
+                // Choose which PowerUp to pick
+                // Pick one from the possibilities in powerUpFrequency
+                int ndx = Random.Range(0, powerUpFrequency.Length);
+                WeaponType puType = powerUpFrequency[ndx];
+                // Spawn a PowerUp
+                GameObject go = Instantiate(prefabPowerUp) as GameObject;
+                PowerUp pu = go.GetComponent<PowerUp>();
+                // Set it to the proper WeaponType
+                pu.SetType(puType);
+
+                // Set it to the position of the destroyed ship
+                pu.transform.position = e.transform.position;
+            }
         }
+
     }
 
     private void Awake()
@@ -51,6 +81,7 @@ public class Main : MonoBehaviour {
         // Invoke SpawnEnemy() once (in 2 seconds, based on default values)
         Invoke("SpawnEnemy", 1f / enemySpawnPerSecond);
 
+        enemiesUntilBoss = bossFrequency;
         // A generic Dictionary with WeaponType as the key
         WEAP_DICT = new Dictionary<WeaponType, WeaponDefinition>();
         foreach(WeaponDefinition def in weaponDefinitions)
@@ -58,9 +89,17 @@ public class Main : MonoBehaviour {
             WEAP_DICT[def.type] = def;
         }
     }
-    public void Start()
+    public void Update()
     {
-        SpawnBoss();
+        if (enemiesUntilBoss <= 0)
+        {
+            if (!bossSpawned)
+            {
+                SpawnBoss();
+                enemiesUntilBoss = bossFrequency;
+            }
+
+        }
     }
     public void SpawnEnemy()
     {
@@ -107,7 +146,8 @@ public class Main : MonoBehaviour {
         pos.x = Random.Range(xMin, xMax);
         pos.y = bndCheck.camHeight + enemyPadding;
         go.transform.position = pos;
-/*
+        bossSpawned = true;
+/*      
         // Invoke SpawnEnemy() again
         Invoke("SpawnEnemy", 1f / enemySpawnPerSecond);*/
     }

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//This mostly uses the Enemy_4 Script as a base.  However, the movement from Enemy_1 is
+//used, as it provided the ideal results.
+
 /// <summary>
 /// Part is another serializable data storage class just like WeaponDefinition
 /// </summary>
@@ -24,8 +27,7 @@ public class Part
 public class Boss: Enemy {
 
     [Header("Set in Inspector: Boss")]
-    public Part[] parts; // The array of ship Parts
-    public float leftAndRightEdge = 20f;
+    public Part[] parts; // The array of ship Parts    
 
     private Vector3 p0, p1; // The two points to interpolate
     private float timeStart; // Birth time for this Enemy_4
@@ -77,21 +79,30 @@ public class Boss: Enemy {
                 }
 
                 u = 1 - Mathf.Pow(1 - u, 2); // Apply Ease Out easing to u
-                pos = ((1 - u) * p0) + (u * p1);// Simple linear interpolation*/
-        Vector3 pos = transform.position;
+                pos = ((1 - u) * p0) + (u * p1);// Simple linear interpolation
+        */
 
-        if (pos.x < -leftAndRightEdge)
+        Vector3 tempPos = pos;
+
+        float age = Time.time - timeStart;
+        float theta = Mathf.PI * 2 * age;
+        float sin = Mathf.Sin(theta);
+        tempPos.x = sin;
+        if (pos.y > bndCheck.camHeight/3)
         {
-            speed = Mathf.Abs(speed);
+            tempPos.y -= speed * Time.deltaTime;
         }
-        else if (pos.x > leftAndRightEdge)
-        {
-            speed = -Mathf.Abs(speed);
-        }
+        pos = tempPos;
 
-        pos.x += speed * Time.deltaTime;
-        pos.y = 200;
+        //rotate a bit about y
+        Vector3 rot = new Vector3(0, sin, 0);
+        this.transform.rotation = Quaternion.Euler(rot);
 
+        // base.Move() still handles the movement down in y
+       /* base.Move();*/
+
+
+        // print (bndCheck.isOnScreen);
     }
 
     // These two functions find a Part in parts based on name or GameObject
