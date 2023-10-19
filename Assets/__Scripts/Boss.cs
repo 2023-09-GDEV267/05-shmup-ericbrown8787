@@ -89,7 +89,7 @@ public class Boss: Enemy {
 
             float age = Time.time - timeStart;
             float theta = Mathf.PI * 2 * age;
-            float sin = Mathf.Sin(theta);
+            float sin = Mathf.Sin(theta/2);
             tempPos.x = sin * .75f * bndCheck.camWidth - bndCheck.radius;
             if (tempPos.y < bndCheck.camHeight / 3)
             {
