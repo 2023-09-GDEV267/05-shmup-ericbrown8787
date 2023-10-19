@@ -377,7 +377,7 @@ MonoBehaviour:
   prefabBoss: {fileID: 1539775467464788, guid: fe12238f9de0f784db943678161f3bb9, type: 3}
   enemySpawnPerSecond: 0.5
   enemyDefaultPadding: 1.5
-  bossFrequency: 3
+  bossFrequency: 1
   weaponDefinitions:
   - type: 1
     letter: B
