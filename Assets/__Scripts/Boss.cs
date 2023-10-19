@@ -32,6 +32,7 @@ public class Boss: Enemy {
     private Vector3 p0, p1; // The two points to interpolate
     private float timeStart; // Birth time for this Enemy_4
     private float duration = 4; // Duration of movement
+    private bool berserk = false;
 
     private void Start()
     {
@@ -69,37 +70,56 @@ public class Boss: Enemy {
 
     public override void Move()
     {
-        /*        // This completely overrides Enemy.Move() with a linear interpolation
-                float u = (Time.time - timeStart) / duration;
-
-                if (u >= 1)
-                {
-                    InitMovement();
-                    u = 0;
-                }
-
-                u = 1 - Mathf.Pow(1 - u, 2); // Apply Ease Out easing to u
-                pos = ((1 - u) * p0) + (u * p1);// Simple linear interpolation
-        */
-
-        Vector3 tempPos = pos;
-
-        float age = Time.time - timeStart;
-        float theta = Mathf.PI * 2 * age;
-        float sin = Mathf.Sin(theta);
-        tempPos.x = sin;
-        if (pos.y > bndCheck.camHeight/3)
+        int partsDestroyed = 0;
+        foreach (Part prt in parts)
         {
-            tempPos.y -= speed * Time.deltaTime;
+            if (Destroyed(prt))
+            {
+                partsDestroyed++;   
+            }
         }
-        pos = tempPos;
+        if (partsDestroyed >= parts.Length / 2)
+        {
+            berserk = true;
+        }
 
-        //rotate a bit about y
-        Vector3 rot = new Vector3(0, sin, 0);
-        this.transform.rotation = Quaternion.Euler(rot);
+        if (berserk == true)
+        {
+            Vector3 tempPos = pos;
 
-        // base.Move() still handles the movement down in y
-       /* base.Move();*/
+            float age = Time.time - timeStart;
+            float theta = Mathf.PI * 2 * age;
+            float sin = Mathf.Sin(theta);
+            tempPos.x = sin * .75f * bndCheck.camWidth - bndCheck.radius;
+            if (tempPos.y < bndCheck.camHeight / 3)
+            {
+                tempPos.y += speed * Time.deltaTime;
+            }
+            pos = tempPos;
+
+            //rotate a bit about y
+            Vector3 rot = new Vector3(0, sin, 0);
+            this.transform.rotation = Quaternion.Euler(rot);
+
+            // base.Move() still handles the movement down in y
+            /*base.Move();*/
+
+        }
+        else
+        {
+            // This completely overrides Enemy.Move() with a linear interpolation
+            float u = (Time.time - timeStart) / duration;
+
+            if (u >= 1)
+            {
+                InitMovement();
+                u = 0;
+            }
+
+            u = 1 - Mathf.Pow(1 - u, 2); // Apply Ease Out easing to u
+            pos = ((1 - u) * p0) + (u * p1);// Simple linear interpolation
+        }
+
 
 
         // print (bndCheck.isOnScreen);
@@ -212,9 +232,11 @@ public class Boss: Enemy {
                     if (!Destroyed(prt)) // If a part still exists...
                     {
                         allDestroyed = false; // ...change allDestroyed to false
+
                         break; // & break out of the foreach loop
                     }
                 }
+
                 if (allDestroyed) // If it IS completely destroyed...
                 {
                     // ...tell the Main singleton that this ship was destroyed

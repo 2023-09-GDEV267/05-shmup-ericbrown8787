@@ -314,7 +314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   fireRate: 0.3
-  health: 10
+  health: 30
   score: 100
   showDamageDuration: 0.1
   powerUpDropChance: 1
@@ -325,7 +325,7 @@ MonoBehaviour:
   notifiedOfDestruction: 0
   parts:
   - name: Cockpit
-    health: 5
+    health: 10
     protectedBy:
     - Fuselage
     go: {fileID: 0}
@@ -338,12 +338,12 @@ MonoBehaviour:
     go: {fileID: 0}
     mat: {fileID: 0}
   - name: WingL
-    health: 5
+    health: 10
     protectedBy: []
     go: {fileID: 0}
     mat: {fileID: 0}
   - name: WingR
-    health: 5
+    health: 10
     protectedBy: []
     go: {fileID: 0}
     mat: {fileID: 0}
